@@ -54,7 +54,7 @@ form.addEventListener('submit', async event => {
     }
 
     createGallery(data.hits);
-    smoothScroll();
+ 
 
     if (page * 15 < totalHits) {
       showLoadMoreButton();
@@ -82,3 +82,34 @@ function smoothScroll() {
     behavior: 'smooth',
   });
 }
+loadMoreBtn.addEventListener('click', async () => {
+  page += 1;
+  showLoader();
+  hideLoadMoreButton();
+
+  try {
+    const data = await getImagesByQuery(query, page);
+    createGallery(data.hits);
+    smoothScroll();
+
+    const totalLoaded = page * 15;
+    if (totalLoaded >= totalHits) {
+      hideLoadMoreButton();
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+      });
+    } else {
+      showLoadMoreButton();
+    }
+  } catch (error) {
+    iziToast.error({
+      title: 'Error',
+      message: 'Failed to load more images.',
+      position: 'topRight',
+    });
+  } finally {
+    hideLoader();
+  }
+});
+
