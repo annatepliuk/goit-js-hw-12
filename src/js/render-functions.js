@@ -51,3 +51,6 @@ export function showLoadMoreButton() {
 export function hideLoadMoreButton() {
   loadMoreButton.classList.add('hidden');
 }
+export function refreshLightbox() {
+  lightbox.refresh();
+}
